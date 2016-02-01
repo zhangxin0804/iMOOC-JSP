@@ -20,7 +20,17 @@
 
 		所需技术：HTML，CSS, 数据库技术，至少一门高级语言(Java, C#, PHP), Javascript, XML等。主流的动态网页脚本技术(JSP, ASP.NET, PHP).
 
-4. 
+4. Tomcat服务器是常见的WEB服务器，是一个Apache组织下的开源项目。它可以用于解析HTML,CSS, JavaScript这些前端语言的标签，同时它也是
+JSP/Servlet的容器。因此学习JSP开发，需要这样的一个容器所以可以考虑用Tomcat服务器。
+
+5. 在Mac下，如何启动/关闭 Tomcat服务器？
+	启动：/Library/Tomcat/bin/startup.sh
+	关闭：/Library/Tomcat/bin/shutdown.sh
+
+6. 
+
+
+
 
 
 

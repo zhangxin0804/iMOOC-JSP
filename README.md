@@ -12,4 +12,15 @@ MyEclipse的功能非常强大，支持广泛，尤其是对各种开源产品�
 http://www.imooc.com/video/2929
 http://www.imooc.com/video/2931
 
-5. 
+5. 如何使用Eclipse For Java EE 来开发Java WEB应用程序。
+
+	首先下载Eclipse J2EE版本，然后打开eclipse指定workspace. 新建一个dynamic web project工程，输入工程名称。然后Target Runtime表示
+项目的运行环境，选择Apache Tomcat v8.0，然后指定到Tomcat的安装主目录 /usr/local/apache-tomcat-8.0.30    指定JRE运行环境，选择JDK1.8
+	接下来创建一个默认的首页，在工程explore栏的WebContent下，创建一个index.jsp文件。然后输入测试例句。
+	右键工程，run as on Server，选择Tomcat 8.然后会出现eclipse自带的浏览器显示效果。
+
+6. 注意：当在Tomcat上不熟发布了一个Web应用程序后，默认的路径是和我们在IDE中新建的工程名是相同的，但实际上可以不相同。换句话说，可以修改成其他的
+Web项目虚拟路径。修改后，要重新部署，然后启动tomcat后，要换成新的虚拟路径才能正确访问！！！ ( 目前只针对MyEclipse IDE, 不知道Eclipse J2EE )
+
+7. 
+

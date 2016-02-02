@@ -156,6 +156,7 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 	JSP有9大内置对象，其中常用的5个内置对象为：out, request, response, session, application; 剩下4个不常用的内置对象
 为：page, pageContext, exception, config
 
+	//-----------------------------------------------------------------------------------------//
 	out
 	out对象是jspWriter类的实例，是向客户输出内容常用的对象。常用方法如下：
 	【1】void println(), 向客户端打印字符串，可以输出HTML标签，这样客户端浏览器收到响应时可以相应解析。
@@ -167,23 +168,30 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 	【7】boolean isAutoFlush(), 返回缓冲区满时，是自动清空还是抛出异常。
 	【8】void close(), 关闭输出流。
 
-
+	//-----------------------------------------------------------------------------------------//
 	request
 	客户端的请求信息被封装在request对象中，通过它才能了解到客户的需求，然后做出响应。它是HttpServletRequest类的实例。request对象具有请求
 	域，即完成客户端的请求之前，该对象一直有效。常用方法如下：
-	【1】String getParameter(String name), 表单中的<input>控件中,有一个属性是name, 这次传递的就是这个name属性的值。
+	【1】String getParameter(String name), 表单中的<input>控件中,有一个属性是name,传递的就是这个name属性的值,得到对应value属性的值。
 	【2】String[] getParameterValues(String name), 同上但此时属性name会对应有多个属性value, 比如<input>控件类型为checkbox
-	【3】void setAttribute(String, Object), 存储此请求中的属性。
+	【3】void setAttribute(String, Object), 在请求对象中，存储属性。属性是键值对。
 	【4】Object getAttribute(String name), 返回指定属性的属性值。
 	【5】String getContentType(), 得到请求体的MIME类型。
 	【6】String getProtocol(), 返回请求用的协议类型及版本号。
 	【7】String getServerName(), 返回接受请求的服务器主机名。
+	【8】int getServerPort(), 返回服务器接受此请求所用的端口号。
+	【9】String getCharacterEncoding(), 返回字符编码方式。
+	【10】void setCharacterEncoding(), 设置请求的字符编码方式。
+	【11】int getContentLength(), 返回请求体的长度(以字节数)
+	【12】String getRemoteAddr(), 返回发送此请求的客户端IP地址。
+	【13】String getRealPath(), 返回一虚拟路径的真实路径。
+	【14】String request.getContextPath(), 返回上下文路径。
 
 	注意：getParameter()等一些方法，不仅针对post方式表单提交信息封装与request对象中的信息获取，也可以对URL传递参数进行信息获取。
 
 	注意：对应request对象中若包含中文信息，由于表单提交的信息默认编码为ISO-8859XX,因此我们要重新set编码方式，可以通过
 	     request.setCharacterEncoding("utf-8");来解决中文乱码问题。但是无法解决URL传递中文参数出现的乱码问题,但其实也有解决办法，可以
-	     通过配置server.xml文件来解决如下，加上一个属性 URIEncoding="utf-8"
+	     通过配置server.xml文件来解决如下，加上一个属性 URIEncoding="utf-8". (记得要重启Tomcat来测试！！)
 	     <Connector port="8080" protocol="HTTP/1.1"
                     connectionTimeout="20000"
                     redirectPort="8443" URIEncoding="utf-8"/>
@@ -191,6 +199,35 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 
 	ref: http://www.w3school.com.cn/tags/tag_input.asp
 		 http://www.w3school.com.cn/tiy/t.asp?f=html_checkboxes
+
+	//-----------------------------------------------------------------------------------------//
+
+	response
+	response对象包含了响应客户请求的有关信息，但在JSP中很少直接用到它。它是HttpServletResponse类的实例。response对象具有页面的作用域，即
+	访问一个页面时，该页面内的response对象只能对这次访问有效，其他页面的response对象对当前页面无效。
+
+	【1】String getCharacterEncoding(), 返回响应用的是何种字符编码。
+	【2】void setContentType(String type), 设置响应的MIME类型。一般写在最前面。
+	【3】PrintWriter getWriter(), 返回可以向客户端输出字符的一个对象。(注意比较：PrintWriter与内置out对象的区别)
+	【4】sendRedirect(String location), 重新定向客户端的请求。
+
+	注意：PrintWriter的使用，需要导入java.io.*, 也就是在page指令中，import属性也即 import = "java.util.*, java.io.*"
+	注意：PrintWriter类型的对象的输出，总是提前于内置out对象的输出。如果想让out对象的输出提前，可以强制flush缓冲区，这样就会直接输出。利用
+	     out.flush()方法。
+
+	//-----------------------------------------------------------------------------------------//
+
+	session
+	【1】long getCreationTime(), 返回session创建时间, 单位为ms毫秒。
+	【2】String getId(); 返回session创建时JSP引擎为它设的唯一ID号。
+	【3】Object setAttribute(String name, Object value), 按照键值对，给session对象中设置一个属性。
+	【4】Object getAttribute(String name), 返回指定名称的属性，没有则返回null
+	【5】String[] getValueNames(), 返回一个包含此session中所有可用属性的数组。
+	【6】int getMaxInactiveInterval(), 返回两次请求间隔多长时间此session被取消(单位秒)
+	【7】setMaxInactiveInterval(), 设置当前session最大生存期限，单位为秒。
+
+
+
 
 
 21. Web程序的请求响应模式：即用户发送HTTP请求(request), 服务器给用户响应(response).
@@ -201,7 +238,8 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 22. 什么是缓冲区？
 
 	缓冲区又叫buffer, 是内存的一块儿区域用来保存临时数据。当我们调用 out.println()用于向客户端输出内容时，我们在客户端浏览器是可以看见这些
-内容的，同时这些内容实际上也在内存上的缓冲区存着。
+内容的，同时这些内容实际上也在内存上的缓冲区存着。换句话说，每当我们输出时，输出的内容是先到缓冲区缓存到一定字节数时，作为一个包转发出去的。这样
+按包发送要比一个字节一个字节的发送，效率高！
 
 23. 表单常用的提交方式get与post区别
 
@@ -214,6 +252,41 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 	post
 	将用户提交的信息封装在HTML HEADER内。适合提交数据量大，安全性高的用户信息。比如：注册、修改、上传等功能。因此，如何获得post方式提交的表单
 	信息，就要通过其他的内置对象来完成了。
+
+
+24. 请求转发与请求重定向的区别。(重要！！！)
+
+	请求重定向：客户端行为，response.sendRedirect(), 从本质上讲等同于两次请求，前一次的请求对象不会保存，地址栏的URL地址会改变。
+	举例：假设去A局办理护照，A局的人说：这个事儿不归我们管，去B局，然后从A局出来，自己乘车再去B局。
+
+	请求转发：服务器端行为，request.getRequestDispatcher("转发地址").forward(request, response);是一次请求，转发后请求对象会保存，
+	        地址栏URL不变
+	举例：你去了A局， A局看了以后，知道这个事情其实应该B局来管，但是他没有把你退回来，而是让你坐一会儿，自己到后面办公室联系了B的人，让他们办好
+	     送过来。
+
+
+25. 什么是session?
+
+	session表示客户端与服务器的一次会话；WEB中的session指的是用户在浏览某个网站时，从进入网站到浏览器关闭所经过的这段时间，也就是用户浏览这个
+网站所花费的时间。从上述定义中可以看到，session实际上是一个特定的时间概念。
+	在服务器的内存中，保存着不同用户的session.
+	session会话，是用来保存用户状态的一种机制。
+
+	举例购物流程，整个购物过程属于一次会话。
+	用户登录 -> 放入购物车 -> 订单填写 -> 提交订单 -> 订单确认 -> 立即付款
+
+
+26. session对象
+	· session对象是一个JSP的内置对象。
+	· session对象是在第一个JSP页面被加载时自动创建，完成会话期管理。
+	· 从一个客户打开浏览器并连接到服务器开始，到客户关闭浏览器，离开这个服务器结束，被称为一个会话。
+	· 当一个客户访问一个服务器时，可能会在服务器的几个页面之间切换，服务器应当通过某种办法知道这是同一个客户，就需要session对象。
+	· session对象是HttpSession类的实例。
+	· 只有把相关会话的所有页面都关闭后，才算这个session的结束。
+
+27. 
+
+
 
 
 

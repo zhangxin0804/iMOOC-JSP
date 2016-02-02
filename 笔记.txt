@@ -70,7 +70,8 @@ JSP/Servlet的容器。因此学习JSP开发，需要这样的一个容器，所
 11. 什么是JSP?
 
 	JSP全称 Java Server Pages(Java服务器页面),其根本是一个简化的Servlet设计，它是在传统网页HTML文件中，插入Java程序段，从而形成JSP文件。
-JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端执行的。用JSP开发的Web应用是跨平台的。
+JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端执行的。用JSP开发的Web应用是跨平台的。在JSP的生命周期中，会伴随着JSP转化到Servlet
+的过程(由JSP引擎将JSP编译得到对应的Servlet .java文件和字节码文件)。
 
 12. 常见的动态网站开发技术对比如下：
 	
@@ -78,7 +79,9 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 	ASP.NET： 	.NET平台，简单易学，安全性以及跨平台性差。
 	PHP：		简单高效，成本低开发周期短，特别适合中小型企业的WEB应用开发。(LAMP: Linus + Apache + MySQL + PHP)
 
-13. JSP页面的组成部分包括： 静态内容，指令，表达式，小脚本，声明，注释。
+
+13. JSP页面的组成部分包括： 静态内容(html)，指令，表达式，小脚本，声明，注释。
+
 
 14. JSP的指令，常用的有3个。三大指令！！
 
@@ -91,19 +94,66 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 
 		<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-	    	属性 				描述									默认值
-	    language		指定JSP页面使用的脚本语言						Java
-	    import			通过该属性来引用脚本语言中使用到的类文件			无
-	    contentType		指定JSP文件类型和页面的字符编码					text/html, ISO-8859-1
-
+	    	属性 				描述																	默认值
+	    language		指定JSP页面使用的脚本语言														Java
+	    import			通过该属性来引用脚本语言中使用到的类文件											无
+	    contentType		指定JSP文件类型和页面的字符编码(指服务器发给客户端时的内容编码)					text/html, ISO-8859-1
+		pageEncoding	是JSP文件本身的编码 (contentType更常用)
 
 15. JSP的注释
 
 		HTML的注释：		<!-- html注释 -->  这种注释，客户端可见，也即客户端view page source是可以看到的。
 		JSP的注释： 		<%-- html注释 --%>  客户端不可见。
-		JSP的脚本注释：	//  /* */          也即Java的注释， 比如 <%       //           %>
+		JSP的脚本注释：	//  /* */          也即脚本中Java的注释， 比如 <%       //           %>
 
-16. 
+16. JSP的脚本
+	
+	在JSP页面中执行的JAVA代码。把java代码写在JSP标签之间。语法： <% Java代码 %>
+	比如：<% out.println("Hello World!"); %>, 其中out是一个JSP内置的用于输出的对象。
+
+17. JSP的声明
+
+	在JSP页面中定义变量或者方法。语法：<%!  Java代码   %>
+	这里的Java代码是声明一些变量，或者定义方法，方便以后的JSP页面中的脚本去调用这些声明的变量或者定义的方法。
+
+
+18. JSP的表达式
+
+	在JSP页面中执行的表达式,表达式可以是之前定义的一些变量或者定义的方法。语法：   <%= 表达式 %>  
+	注意：表达式不以分号结束！！！不要弄混了！！
+
+	<%! 
+		String name = "张小哈";
+		int add(int x, int y){
+			return x+y;
+		}
+	%>
+	你好，<%= name %> <br/>
+	x+y= <%= add(10,2) %>
+
+
+19. JSP页面的生命周期 (重点！！！！！)
+
+	用户向服务器发出请求index.jsp, 服务器判断是否是第一次请求。如果是第一次请求，Tomcat的JSP引擎把该JSP文件转换成为一个Servlet
+(Servlet本质上也是一个java类), 然后经过编译生成字节码文件，并执行jspInit()方法。如果不是第一次请求，则直接找到编译生成的字节码文件，
+解析执行 jspService(). 
+	
+	注意：由JSP引擎，将JSP文件转换成Servlet后，并编译生成的对应的字节码文件，存放在 /work目录下，上面笔记中有提到。
+	注意：jspInit()方法，一共只会执行一次。
+
+	jspService()方法被调用来处理客户端的请求。对每一个请求，JSP引擎创建一个新的线程来处理该请求。如果有多个客户端同时请求该JSP文件，则JSP
+引擎会创建多个线程。每个客户端请求对应一个线程。以多线程方式执行，可以大大降低对系统的资源需求，提高系统的并发量及响应时间。但也要注意多线程的编程
+带来的同步问题，由于该Servlet始终在内存，所以响应是非常快的。
+
+	注意：在转换成Servlet并编译后，产生的字节码文件和.java文件中，可以看到jspInit()方法和jspService()方法！！
+	注意：每当JSP文件发生改变时，当客户发生请求时，JSP引擎就会重新将该JSP转化成Servlet,并编译生成新的字节码文件来解析执行。
+
+20. 
+
+	
+
+
+
 
 
 

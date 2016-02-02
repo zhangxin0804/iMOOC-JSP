@@ -20,7 +20,7 @@
 
 		所需技术：HTML，CSS, 数据库database技术，至少一门高级语言(Java, C#, PHP), JavaScript, XML等。主流的动态网页脚本技术(JSP, ASP.NET, PHP). 注意：ASP.NET是微软的技术，PHP是Apache的技术。
 
-4. Tomcat服务器是常见的WEB服务器，是一个Apache组织下的开源项目。它可以用于解析HTML,CSS, JavaScript这些前端语言，同时它也是
+4. Tomcat服务器是常见的WEB服务器，是一个Apache组织下的开源项目。它可以用于解析HTML,CSS, 这些标签语言，同时它也是
 JSP/Servlet的容器。因此学习JSP开发，需要这样的一个容器，所以可以考虑用Tomcat服务器。   注意：容器这个概念。
 
 5. 在Mac下，如何启动/关闭 Tomcat服务器？(安装说明见Evernote笔记)
@@ -30,17 +30,17 @@ JSP/Servlet的容器。因此学习JSP开发，需要这样的一个容器，所
 6. Tomcat服务器的目录结构
 
 	/bin		存放各种平台下用于启动和停止Tomcat的命令文件, 存放的都是可执行文件,比如startup.sh和shutdown.sh
-	/conf		存放Tomcat服务器的各种配置文件。比如：配置Tomcat的默认端口号等。
+	/conf		存放Tomcat服务器的各种配置文件。比如：server.xml文件配置Tomcat的默认端口号等。
 	/lib 		存放Tomcat服务器所需的各种jar文件。
 	/logs		存放Tomcat的日志文件。
 	/temp		Tomcat运行时用于存放临时文件。
 	/webapps 	当发布Web应用时，默认会将Web应用的文件发布到于此目录中。（重要！）
-	/work		Tomcat把由JSP生成的Servlet放于此目录下。
+	/work		Tomcat把由JSP生成的Servlet文件，以及对其编译后生成的字节码文件存储在这里。
 
 7. 手动编写第一个Web程序。
 	(1) 在/Library/Tomcat/WebApps下创建新工程项目目录。
 	(2) 在新工程目录下，编写index.jsp
-	(3) 在新工程目录下，创建WEB-INF目录
+	(3) 在新工程目录下，创建WEB-INF目录, 其中WEB-INF目录下还需要创建：web.xml即项目部署文件，classes文件夹，lib文件夹。
 	(4) 测试运行。
 
 8. WEB-INF目录详解。(重要！！！)
@@ -71,11 +71,12 @@ JSP/Servlet的容器。因此学习JSP开发，需要这样的一个容器，所
 
 	JSP全称 Java Server Pages(Java服务器页面),其根本是一个简化的Servlet设计，它是在传统网页HTML文件中，插入Java程序段，从而形成JSP文件。
 JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端执行的。用JSP开发的Web应用是跨平台的。在JSP的生命周期中，会伴随着JSP转化到Servlet
-的过程(由JSP引擎将JSP编译得到对应的Servlet .java文件和字节码文件)。
+的过程(由JSP引擎将JSP转化成Servlet即java类文件.java, 然后编译成字节码文件.class)
+
 
 12. 常见的动态网站开发技术对比如下：
 	
-	JSP： 		Java平台，安全性高，适合开发大型企业级WEB应用程序。
+	JSP： 		Java平台，安全性高，适合开发大型企业级WEB应用程序。还有如今流行的分布式计算框架，Hadoop也是基于Java的。
 	ASP.NET： 	.NET平台，简单易学，安全性以及跨平台性差。
 	PHP：		简单高效，成本低开发周期短，特别适合中小型企业的WEB应用开发。(LAMP: Linus + Apache + MySQL + PHP)
 
@@ -104,12 +105,14 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 
 		HTML的注释：		<!-- html注释 -->  这种注释，客户端可见，也即客户端view page source是可以看到的。
 		JSP的注释： 		<%-- html注释 --%>  客户端不可见。
-		JSP的脚本注释：	//  /* */          也即脚本中Java的注释， 比如 <%       //           %>
+		JSP的脚本注释：	//  /* */          也即脚本中Java的注释，客户端不可见。 比如 <%       //           %>
+
 
 16. JSP的脚本
 	
 	在JSP页面中执行的JAVA代码。把java代码写在JSP标签之间。语法： <% Java代码 %>
-	比如：<% out.println("Hello World!"); %>, 其中out是一个JSP内置的用于输出的对象。
+	比如：<% out.println("Hello World!"); %>, 其中out是一个JSP内置的用于浏览器输出的对象。
+
 
 17. JSP的声明
 
@@ -142,13 +145,81 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 	注意：jspInit()方法，一共只会执行一次。
 
 	jspService()方法被调用来处理客户端的请求。对每一个请求，JSP引擎创建一个新的线程来处理该请求。如果有多个客户端同时请求该JSP文件，则JSP
-引擎会创建多个线程。每个客户端请求对应一个线程。以多线程方式执行，可以大大降低对系统的资源需求，提高系统的并发量及响应时间。但也要注意多线程的编程
-带来的同步问题，由于该Servlet始终在内存，所以响应是非常快的。
+引擎会创建多个线程。每个客户端请求对应一个线程。以多线程方式执行，可以大大降低对系统的资源需求，提高系统的并发量及减少了响应时间。但也要注意多线程
+的编程带来的同步问题，由于该Servlet始终在内存，所以响应是非常快的。
 
 	注意：在转换成Servlet并编译后，产生的字节码文件和.java文件中，可以看到jspInit()方法和jspService()方法！！
 	注意：每当JSP文件发生改变时，当客户发生请求时，JSP引擎就会重新将该JSP转化成Servlet,并编译生成新的字节码文件来解析执行。
 
-20. 
+20. JSP的内置对象是WEB容器创建的一组对象，不使用new关键字就可以创建使用的内置对象。比如：out就是一个内置对象。
+
+	JSP有9大内置对象，其中常用的5个内置对象为：out, request, response, session, application; 剩下4个不常用的内置对象
+为：page, pageContext, exception, config
+
+	out
+	out对象是jspWriter类的实例，是向客户输出内容常用的对象。常用方法如下：
+	【1】void println(), 向客户端打印字符串，可以输出HTML标签，这样客户端浏览器收到响应时可以相应解析。
+	【2】void clear(), 清除缓冲区的内容，如果在flush之后调用会抛出异常。
+	【3】void clearBuffer(), 清除缓冲区内容，如果在flush之后调用不会抛出异常。
+	【4】void flush(), 将缓冲区内容输出到客户端。
+	【5】int getBufferSize(), 返回缓冲区以字节数的大小，如不设缓冲区则为0
+	【6】int getRemaining(), 返回缓冲区还剩余多少可用。
+	【7】boolean isAutoFlush(), 返回缓冲区满时，是自动清空还是抛出异常。
+	【8】void close(), 关闭输出流。
+
+
+	request
+	客户端的请求信息被封装在request对象中，通过它才能了解到客户的需求，然后做出响应。它是HttpServletRequest类的实例。request对象具有请求
+	域，即完成客户端的请求之前，该对象一直有效。常用方法如下：
+	【1】String getParameter(String name), 表单中的<input>控件中,有一个属性是name, 这次传递的就是这个name属性的值。
+	【2】String[] getParameterValues(String name), 同上但此时属性name会对应有多个属性value, 比如<input>控件类型为checkbox
+	【3】void setAttribute(String, Object), 存储此请求中的属性。
+	【4】Object getAttribute(String name), 返回指定属性的属性值。
+	【5】String getContentType(), 得到请求体的MIME类型。
+	【6】String getProtocol(), 返回请求用的协议类型及版本号。
+	【7】String getServerName(), 返回接受请求的服务器主机名。
+
+	注意：getParameter()等一些方法，不仅针对post方式表单提交信息封装与request对象中的信息获取，也可以对URL传递参数进行信息获取。
+
+	注意：对应request对象中若包含中文信息，由于表单提交的信息默认编码为ISO-8859XX,因此我们要重新set编码方式，可以通过
+	     request.setCharacterEncoding("utf-8");来解决中文乱码问题。但是无法解决URL传递中文参数出现的乱码问题,但其实也有解决办法，可以
+	     通过配置server.xml文件来解决如下，加上一个属性 URIEncoding="utf-8"
+	     <Connector port="8080" protocol="HTTP/1.1"
+                    connectionTimeout="20000"
+                    redirectPort="8443" URIEncoding="utf-8"/>
+
+
+	ref: http://www.w3school.com.cn/tags/tag_input.asp
+		 http://www.w3school.com.cn/tiy/t.asp?f=html_checkboxes
+
+
+21. Web程序的请求响应模式：即用户发送HTTP请求(request), 服务器给用户响应(response).
+
+	举例：比如一个用户的登录请求，点击登录即在向服务器发送请求，在请求对象中封装了用户名和密码。当服务器端接收到用户的请求后，判断用户名和密码后
+，给客户端发送响应页面。
+
+22. 什么是缓冲区？
+
+	缓冲区又叫buffer, 是内存的一块儿区域用来保存临时数据。当我们调用 out.println()用于向客户端输出内容时，我们在客户端浏览器是可以看见这些
+内容的，同时这些内容实际上也在内存上的缓冲区存着。
+
+23. 表单常用的提交方式get与post区别
+
+	<form name = "regForm" action = "动作" method = "提交方式">
+	</form>
+
+	get
+	以明文的方式，通过URL提交数据，数据在URL中可以看到。提交的数据最多不超过2KB。安全性较低，但效率比post方式高。适合提交数据量不大，安全性不高的数据。比如：搜索、查询等功能。
+
+	post
+	将用户提交的信息封装在HTML HEADER内。适合提交数据量大，安全性高的用户信息。比如：注册、修改、上传等功能。因此，如何获得post方式提交的表单
+	信息，就要通过其他的内置对象来完成了。
+
+
+
+
+
+
 
 	
 

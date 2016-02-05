@@ -8,6 +8,7 @@
 
 2. Java Web开发涉及到Java整个架构下的JavaEE方向 (Java的架构分为JavaSE, JavaEE和JavaME). 
 
+
 3. 静态网页 V.S. 动态网页
 
 	静态网页
@@ -20,12 +21,19 @@
 
 		所需技术：HTML，CSS, 数据库database技术，至少一门高级语言(Java, C#, PHP), JavaScript, XML等。主流的动态网页脚本技术(JSP, ASP.NET, PHP). 注意：ASP.NET是微软的技术，PHP是Apache的技术。
 
-4. Tomcat服务器是常见的WEB服务器，是一个Apache组织下的开源项目。它可以用于解析HTML,CSS, 这些标签语言，同时它也是
+
+
+4. Tomcat服务器是常见的WEB应用服务器，是一个Apache组织下的开源项目。它可以用于解析HTML,CSS, 这些标签语言，同时它也是
 JSP/Servlet的容器。因此学习JSP开发，需要这样的一个容器，所以可以考虑用Tomcat服务器。   注意：容器这个概念。
+Tomcat容器等级分为4个等级：Engine, Host, Context和Wrapper, 具体可以看Servlet笔记。
+
+
 
 5. 在Mac下，如何启动/关闭 Tomcat服务器？(安装说明见Evernote笔记)
 	启动：/Library/Tomcat/bin/startup.sh
 	关闭：/Library/Tomcat/bin/shutdown.sh
+
+
 
 6. Tomcat服务器的目录结构
 
@@ -34,18 +42,23 @@ JSP/Servlet的容器。因此学习JSP开发，需要这样的一个容器，所
 	/lib 		存放Tomcat服务器所需的各种jar文件。
 	/logs		存放Tomcat的日志文件。
 	/temp		Tomcat运行时用于存放临时文件。
-	/webapps 	当发布Web应用时，默认会将Web应用的文件发布到于此目录中。（重要！）
+	/webapps 	当发布Web应用时，默认会将Web应用的文件发布到于此目录中，相当于存放一个个web工程。（重要！）
 	/work		Tomcat把由JSP生成的Servlet文件，以及对其编译后生成的字节码文件存储在这里。
+
+
 
 7. 手动编写第一个Web程序。
 	(1) 在/Library/Tomcat/WebApps下创建新工程项目目录。
 	(2) 在新工程目录下，编写index.jsp
-	(3) 在新工程目录下，创建WEB-INF目录, 其中WEB-INF目录下还需要创建：web.xml即项目部署文件，classes文件夹，lib文件夹。
+	(3) 在新工程目录下，创建WEB-INF目录, 其中WEB-INF目录下还需要创建：web.xml即工程项目部署文件，classes文件夹，lib文件夹。
 	(4) 测试运行。
 
-8. WEB-INF目录详解。(重要！！！)
+
+
+
+8. WEB-INF目录结构详解。(重要！！！)
 	(1) WEB-INF目录是Java的WEB应用的安全目录，所谓安全目录就是客户端无法访问，只有服务器端可以访问的目录。
-	(2) 该目录下的web.xml是项目部署文件。比如部署: 项目的欢迎界面，可以通过在web.xml中添加并更改相应标签来完成。举例如下：
+	(2) 该目录下的web.xml是项目部署文件。比如部署: 注册Servlet, 或者项目的欢迎界面，可以通过在web.xml中添加并更改相应标签来完成。举例如下：
 
 		<welcome-file-list>
         	<welcome-file>index.html</welcome-file>
@@ -54,24 +67,36 @@ JSP/Servlet的容器。因此学习JSP开发，需要这样的一个容器，所
         	<welcome-file>index.jsp</welcome-file>
     	</welcome-file-list>
 
-	(3) 该目录下的classes文件夹，存放编译后的byte code文件即 *.class文件。
+	(3) 该目录下的classes文件夹，存放编译后的byte code文件即 *.class文件。注意：与/work目录下的文件的区别？？！！
 	(4) 该目录下的lib文件夹，存放工程需要的jar包。比如一些连接数据库的驱动jar包。
+
+
 
 9. 注意！！！！！！WEB-INF中的项目部署文件web.xml每次修改后，都要重新启动Tomcat服务器！！！！！很容易忽略！！！！
 
+
+
+
 10. 如何修改Tomcat服务器的默认端口号？
 	Tomcat服务器的默认端口号为 8080. 但实际中，我们电脑中会安装很多应用服务器和数据库服务器，因此有可能造成端口冲突。
-在Tomcat服务器的目录下，conf/server.xml文件中，我们可以设置为比如 8888来修改默认端口号。
+在Tomcat服务器的目录下，conf/server.xml文件中，我们可以设置为比如： 8888 来修改默认端口号。
 
     <Connector port="8080" protocol="HTTP/1.1"
                connectionTimeout="20000"
                redirectPort="8443" />
 
+
+
+
+
 11. 什么是JSP?
 
 	JSP全称 Java Server Pages(Java服务器页面),其根本是一个简化的Servlet设计，它是在传统网页HTML文件中，插入Java程序段，从而形成JSP文件。
 JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端执行的。用JSP开发的Web应用是跨平台的。在JSP的生命周期中，会伴随着JSP转化到Servlet
-的过程(由JSP引擎将JSP转化成Servlet即java类文件.java, 然后编译成字节码文件.class)
+的过程(由JSP引擎将JSP转化成Servlet即java类文件.java, 然后编译成字节码文件.class)   注意：是先有Servlet再有的JSP.
+
+
+
 
 
 12. 常见的动态网站开发技术对比如下：
@@ -81,7 +106,11 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 	PHP：		简单高效，成本低开发周期短，特别适合中小型企业的WEB应用开发。(LAMP: Linus + Apache + MySQL + PHP)
 
 
+
+
 13. JSP页面的组成部分包括： 静态内容(html)，指令，表达式，小脚本，声明，注释。
+
+
 
 
 14. JSP的指令，常用的有3个。三大指令！！
@@ -101,11 +130,17 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 	    contentType		指定JSP文件类型和页面的字符编码(指服务器发给客户端时的内容编码)					text/html, ISO-8859-1
 		pageEncoding	是JSP文件本身的编码 (contentType更常用)
 
+
+
+
+
 15. JSP的注释
 
 		HTML的注释：		<!-- html注释 -->  这种注释，客户端可见，也即客户端view page source是可以看到的。
-		JSP的注释： 		<%-- html注释 --%>  客户端不可见。
-		JSP的脚本注释：	//  /* */          也即脚本中Java的注释，客户端不可见。 比如 <%       //           %>
+		JSP的注释： 		<%-- html注释 --%>  客户端不可见。可以用来注释JSP脚本。
+		JSP脚本内的注释：	//  /* */          也即脚本中Java的注释，客户端不可见。 比如 <%       //           %>
+
+
 
 
 16. JSP的脚本
@@ -113,11 +148,20 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 	在JSP页面中执行的JAVA代码。把java代码写在JSP标签之间。语法： <% Java代码 %>
 	比如：<% out.println("Hello World!"); %>, 其中out是一个JSP内置的用于浏览器输出的对象。
 
+	JSP脚本<% expression %>内的代码会生成为目标Servlet类的jspService()方法中的代码片段，因此其作用域只作用于当前JSP页面中该脚本段的后面。
+
+
+
 
 17. JSP的声明
 
 	在JSP页面中定义变量或者方法。语法：<%!  Java代码   %>
 	这里的Java代码是声明一些变量，或者定义方法，方便以后的JSP页面中的脚本去调用这些声明的变量或者定义的方法。
+
+	注意：在JSP的声明中，不能访问JSP内置的9大对象！！！！
+
+	JSP声明（<%!  expression  %>）内所定义的变量会生成为目标Servlet类的全局变量，作用域涵盖当前JSP页面及<%@include %>指令所包含进来的JSP文件，且使用不分先后顺序。
+
 
 
 18. JSP的表达式
@@ -133,6 +177,18 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 	%>
 	你好，<%= name %> <br/>
 	x+y= <%= add(10,2) %>
+
+	........
+	 <tr>
+       <td>用户名：</td>
+       <td><input type="text" name="username" value="<%= username%>"/></td>
+     </tr>
+     <tr>
+       <td>密码：</td>
+       <td><input type="password" name="password" value="<%=password %>" /></td>
+     </tr>
+	 ........
+
 
 
 19. JSP页面的生命周期 (重点！！！！！)
@@ -150,6 +206,9 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 
 	注意：在转换成Servlet并编译后，产生的字节码文件和.java文件中，可以看到jspInit()方法和jspService()方法！！
 	注意：每当JSP文件发生改变时，当客户发生请求时，JSP引擎就会重新将该JSP转化成Servlet,并编译生成新的字节码文件来解析执行。
+
+
+
 
 20. JSP的内置对象是WEB容器创建的一组对象，不使用new关键字就可以创建使用的内置对象。比如：out就是一个内置对象。
 
@@ -200,6 +259,16 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 	ref: http://www.w3school.com.cn/tags/tag_input.asp
 		 http://www.w3school.com.cn/tiy/t.asp?f=html_checkboxes
 
+
+
+	注意：getParameter()和getParameterValues()的区别！！！比如下面这种复选框类型的input空间，name属性值都相同，但对应的value属性的值
+不同，因此我们需要用 request.getParameterValues("vehicle")来得到所有可能的value属性的值即  ["Bike", "Car"] .
+
+	<input type="checkbox" name="vehicle" value="Bike" /> I have a bike
+	<input type="checkbox" name="vehicle" value="Car" /> I have a car
+
+
+
 	//-----------------------------------------------------------------------------------------//
 
 	response
@@ -247,7 +316,7 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 	</form>
 
 	get
-	以明文的方式，通过URL提交数据，数据在URL中可以看到。提交的数据最多不超过2KB。安全性较低，但效率比post方式高。适合提交数据量不大，安全性不高的数据。比如：搜索、查询等功能。
+	以明文的方式，通过URL提交数据，数据在URL中可以看到。提交的数据最多不超过2KB。安全性较低，但效率比post方式高。适合提交数据量不大，安全性不高的数据。比如：搜索、查询等功能。超级链接<a href=""></a>也是一种get请求方法。
 
 	post
 	将用户提交的信息封装在HTML HEADER内。适合提交数据量大，安全性高的用户信息。比如：注册、修改、上传等功能。因此，如何获得post方式提交的表单
@@ -284,7 +353,315 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 	· session对象是HttpSession类的实例。
 	· 只有把相关会话的所有页面都关闭后，才算这个session的结束。
 
-27. 
+
+
+
+27. 什么是JavaBeans？
+
+	符合某种特定规范的Java类, 是Java中一种特殊的类。使用JavaBeans的好处是解决代码重复编写，减少代码冗余，功能区分明确，提高了代码的维护性。
+
+	JavaBeans符合某种特定规范，也可以理解为是JavaBeans的设计原则。
+	原则一：公有类
+	原则二：无参的公有构造方法
+	原则三：属性私有
+	原则四：setter和getteer方法
+
+
+28. 什么是JSP动作？
+
+	JSP动作元素 (action elements), 动作元素为 请求处理阶段 提供信息。动作元素遵循XML语法，有一个包含元素名的开始标签，可以有属性、
+可选的内容、与开始标签匹配的结束标签。JSP动作元素包括5大类：
+
+	第一类是与存取JavaBeans有关的，包括：
+	<jsp:useBean>		<jsp:setProperty>		<jsp:getProperty>
+
+	第二类是JSP1.2就开始有的基本动作元素，包括：
+	<jsp:include>	<jsp:forward>	<jsp:param>		<jsp:plugin>	<jsp:params>	<jsp:fallback>
+
+	第三类是JSP2.0开始新增加的动作元素，包括：
+	<jsp:root>		<jsp:declaration>	<jsp:scriptlet>		<jsp:expression>	<jsp:text>		<jsp:output>
+
+	第四类也是新增的动作元素，主要用来动态生成XML元素标签的值，包括：
+	<jsp:attribute>		<jsp:body>		<jsp:element>
+
+	第五类也是新增的动作元素，主要用于Tag File中，包括：
+	<jsp:invoke>	<jsp:dobody>
+
+
+
+29. 如何在JSP页面中使用JavaBeans? 
+
+	方式1：像使用普通java类一样，创建JavaBeans实例。首先在工程src源文件目录中，创建一个符合JavaBeans设计规范的Java类。然后在JSP中，首先
+要在页面顶端，通过page指令的import属性，将该类导入进来。<%@ page import = "packageName.className" %>  然后通过在JSP页面中，插入JSP
+脚本，通过new关键字生成JavaBeans实例，并且定义一些方法，之后就可以通过JSP的表达式来获得信息了。
+	注意：JavaBeans一般都是在JSP页面中进行使用。
+
+
+	方式2：在JSP页面中，使用jsp动作元素(action elements)来使用JavaBeans. 如同上一条笔记中的第一类与JavaBeans有关的3个动作元素。
+	<jsp:useBean> 在JSP页面中实例化或者在指定范围内使用JavaBeans.
+	<jsp:useBean id="标示符" class="java完整类名" scope="作用范围" />
+
+	e.g.： 
+	<jsp:useBean id = "myUsers" class = "packageName.Users" scope = "page" />
+
+	注意：上面jsp动作元素使用后，我们就可以得到一个JavaBeans实例化对象，也就是id属性的值即：myUsers, 但如果此时输出该JavaBeans对象的
+属性值是并没有什么结果，因为我们并没有对该对象进行setter操作！！所以接下来研究<jsp:setProperty>这个动作元素。
+
+
+30. <jsp:setProperty>
+	给已经实例化的JavaBeans对象的属性赋值，一共四种形式。
+
+	<jsp:setProperty name = "JavaBeans实例名" property = "*" /> (跟表单关联)
+	注意：*表示，表单提交过来时name属性的名字值与JavaBeans中的私有属性进行一一匹配，如果匹配上，就会调用JavaBeans中的setter方法，自动将
+表单中的value属性对应的值，set过去。"JavaBeans实例名"就是上面id属性的值。
+
+
+	<jsp:setProperty name = "JavaBeans实例名" property = "JavaBeans属性名" /> (跟表单关联)
+	只匹配表单中的部分name属性对应的JavaBeans私有属性，完成部分setter方法。
+
+
+	<jsp:setProperty name = "JavaBeans实例名" property = "JavaBeans属性名" value = "BeanValue" /> (手工设置)
+	与表单无关，人为对JavaBeans实例的私有属性，进行赋值。
+
+
+	<jsp:setProperty name = "JavaBeans实例名" property = "propertyName" param = "request对象中的参数名" /> (跟request参数关联)
+	param是通过URL地址传参的方式传递的，参数不一定是表单中的参数，可是通过URL地址栏来传递的参数。
+
+	/**********************************************************************************/
+    <form name="loginForm" action="dologin.jsp?mypass=999999" method="post">
+      <table>
+        <tr>
+          <td>用户名：</td>
+          <td><input type="text" name="username" value=""/></td>
+        </tr>
+        <tr>
+          <td>密码：</td>
+          <td><input type="password" name="password" value=""/></td>
+        </tr>
+        <tr>
+          <td colspan="2" align="center"><input type="submit" value="登录"/></td>
+          
+        </tr>
+      </table>
+    </form>
+
+
+    <jsp:setProperty name="myUsers" property="password" param="mypass"/>
+    /**********************************************************************************/
+
+
+
+
+31. <jsp:getProperty>
+	作用：获取指定JavaBeans对象的私有属性的值。
+	<jsp:getProperty name = "JavaBeans实例名" property = "JavaBeans属性名" />
+
+	/**********************************************************************************/
+	<jsp:useBean id="myUsers" class="com.po.Users" scope="page"/>
+
+	<!-- 使用传统的表达式方式来获取用户名和密码 -->
+    <%--     
+       用户名：<%=myUsers.getUsername() %><br>
+       密码：<%=myUsers.getPassword() %><br> 
+    --%>
+    <!-- 使用getProperty方式来获取用户名和密码 -->
+      用户名：<jsp:getProperty name="myUsers" property="username"/> <br>
+      密码：<jsp:getProperty name="myUsers" property="password"/><br>
+
+	/**********************************************************************************/
+
+
+
+
+32. JavaBeans的四个作用域范围。
+
+	<jsp:useBean id="标示符" class="java完整类名" scope="作用范围" />, scope属性可以用来指定JavaBeans的作用范文。
+
+	· page // 可以通过pageContext.getAttribute("")方法获取JavaBeans对象，仅在当前页面有效, 范围最小。
+	· request // 可以通过request.getAttribute("")方法取得JavaBeans对象, 在同一个request中有效。
+	· sesion // 可以通过 session.getAttribute("")方法取得JavaBeans对象, 在同一次session中有效。
+	· application // 可以通过application.getAttribute("")方法取得JavaBeans对象, 范围最大，全局有效。
+
+
+	注意：换句话说，我们可以通过动作元素获取到JavaBeans对象，也可以通过JSP的内置对象，获取到JavaBeans对象，注意scope的作用！
+	注意：如果是scope是request的话，如果使用的是 请求重定向 来测试的话，那么在新的页面内是获取不到JavaBeans对象的，因为相当于是一个新的请求
+	     所以需要使用服务器内部 请求转发 request.getRequestDispatcher("转发地址").forward(request, response); 可以测试成功。
+
+
+
+
+
+
+33. HTTP协议的无状态性
+
+	超文本传输协议HTTP是无状态性的。无状态是指，当浏览器发送请求给服务器时，服务器响应客户端请求。但是当同一个浏览器再次发送请求给服务器时，
+服务器并不知道这个第二次的请求就是刚刚那个客户端。因此，它没有办法去保存用户的状态。
+
+
+
+
+
+
+34. 保存用户状态的两大机制 Session 和 Cookie
+
+	Session, 通过JSP的内置对象session来实现。
+
+
+
+
+
+35. Cookie (注意：潜在安全问题是容易泄露用户信息！！！！！一般都是经过加密的Cookie)
+	Cookie, 是Web服务器保存在客户端的一系列文本信息。作用如下：
+	
+	· 对特定对象的追踪
+	· 保存用户网页浏览记录与习惯, 保存用户状态。
+	· 简化登录
+
+
+	典型应用一：判定注册用户是否已经登录过网站。
+
+	典型应用二："购物车"的处理，比如用户会在一段时间内访问同一家网站，在不同的页面中选择不同的商品，因此可以用cookie来保存用户的这些信息以便
+	          最后结账时，把这些信息一并提取出来，相当于利用cookie保存了用户浏览商品的记录。
+
+	典型应用三：比如一些在线视频网站，会记录用户已经浏览过的视频。比如在搜索栏里显示了你之前搜索过的内容。
+
+	典型应用四：记住用户名和密码，实现自动登录功能。
+
+
+	注意：当浏览器第一次请求某个JSP页面时，此时的请求包中是没有Cookie的此时Cookie是不存在的，然后发生第一次请求--响应，在响应时服务器会写入
+Cookie在响应包中，然后浏览器解析数据显示对应的页面，然后Cookie就也同时保存在客户端了！然后当客户端再有请求时，就会将Cookie一同发送给服务器端，
+然后服务器端就可以根据Cookie来做相应的处理。
+
+	注意：如果服务器端set的Cookie的生存期限很长的话，那么即使当我们把浏览器关闭后，再打开再次请求时，Cookie仍然存在，会由客户端浏览器将其封装
+在request header中，请求到服务器端！！
+
+	
+	************ request header ***************** (第一次请求)
+
+	GET /MySecondJSP/index.jsp HTTP/1.1
+	Host: localhost:8080
+	User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko/20100101 Firefox/37.0
+	Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+	Accept-Language: en-US,en;q=0.5
+	Accept-Encoding: gzip, deflate
+	Connection: keep-alive
+
+
+	************ response header *****************  (第一次响应)
+
+	HTTP/1.1 200 OK
+	Server: Apache-Coyote/1.1
+	Set-Cookie: JSESSIONID=847E281F37C3718D36F158297A8A8651; Path=/MySecondJSP/; HttpOnly
+	Content-Type: text/html;charset=UTF-8
+	Content-Length: 487
+	Date: Fri, 05 Feb 2016 08:31:50 GMT
+
+
+
+	注意：
+
+
+
+
+
+
+36. JSP页面中创建与使用Cookie
+
+	创建Cookie对象
+	Cookie newCookie = new Cookie(String key, Object value);
+
+	写入Cookie对象
+	response.addCookie(newCookie);
+
+	读取Cookie对象
+	Cookie[] cookies = request.getCookies();
+
+
+	与Cookie有关的常用方法
+	----------------------------------------------------------------
+	void setMaxAge(int expiry)         设置Cookie的有效期，以秒为单位
+	void setValue(String value)        在Cookie创建后，对Cookie进行赋值
+	String getName()                   获取Cookie名称
+	String getValue()                  获取Cookie的值
+	int getMaxAge()                    获取Cookie的有效时间，以秒为单位
+
+
+
+
+37.  实现记忆用户名和密码的功能。(利用Cookie)
+
+	当用户点击了一个checkbox也即"十天内记住我的登录状态”,然后输入了用户名和密码，第一次登录成功。当用户下次再次打开这个页面后，用户名和密码仍然出现在页面中。
+
+	login.jsp是用户的一个登录界面。其中包括一个表单，等待用户输入用户名和密码。表单提交，请求dologin.jsp页面。
+	dologin.jsp, 是一个用于处理登录请求的JSP文件。在这个页面中要保存Cookie信息，同时还链接到一个users.jsp文件。
+	users.jsp, 是一个用于查看用户信息的界面。
+
+	在dologin.jsp中，我们要通过jsp脚本先来判断用户是否有点击checkbox, 如果有点击checkbox说明用户希望记忆用户名和密码，那么我们可以创建
+Cookie来记录用户名和密码。创建完后，我们要将Cookie对象，写入response对象，这样客户端浏览器才能保存这个Cookie信息。如果下一次，客户不想记录用户名和密码，那么我们则要让已有的Cookie失效才行，可以通过设置生存时间为0， 再重新response.add来设置失效。
+
+	/******************************************************************************************/
+		// 首先判断是否选择了记住登录状态。
+		String isUseCookie = request.getParameter("isUseCookie");
+		if( isUseCookie != null && isUseCookie.length() != 0 ){
+			// 把用户名和密码保存在Cookie对象里
+			String username = request.getParameter("username");
+			String password = request.getParameter("password");
+			
+			Cookie usernameCookie = new Cookie("username", username);
+			Cookie passwordCookie = new Cookie("password", password);
+			
+			usernameCookie.setMaxAge(864000); // 设置用户名Cookie最大生存时间为10天
+			response.addCookie(usernameCookie);
+			response.addCookie(passwordCookie);
+		}else{
+			Cookie[] cookies = request.getCookies();
+			if( cookies!=null && cookies.length != 0 ){
+				for(Cookie c: cookies){
+					if( c.getName().equals("username") || c.getName().equals("password") ){
+						c.setMaxAge(0); // 设置失效
+						response.addCookie(c); // 重新保存Cookie, 别忘了！！！！
+					}
+				}
+			}
+		}
+    /******************************************************************************************/
+
+
+    接下来我们还要在登录界面login.jsp中判断如果用户上次选中过checkbox, 那么在登录界面上要显示上次登录成功的用户名和密码。换句话说，在登录界面
+中，我们也要判断是否存在Cookie，因为如果之前选中过checkbox就意味着，我们之前设置过了Cookie, 那么再次请求login.jsp页面时，就应该能够得到之前
+设置的Cookie, 所以login.jsp如下：
+
+	/******************************************************************************************/
+
+
+			<%
+			String username = "";
+			String password = "";
+			Cookie[] cookies = request.getCookies();
+			if( cookies!=null && cookies.length != 0 ){
+				for(Cookie c: cookies){
+					if( c.getName().equals("username") ){
+						username = c.getValue();
+					}
+					if( c.getName().equals("password") ){
+						password = c.getValue();
+					}
+				}
+			}
+			%>
+
+		 ........
+		 <tr>
+           <td>用户名：</td>
+           <td><input type="text" name="username" value="<%= username%>"/></td>
+         </tr>
+         <tr>
+           <td>密码：</td>
+           <td><input type="password" name="password" value="<%=password %>" /></td>
+         </tr>
+		 ........
+
+
 
 
 

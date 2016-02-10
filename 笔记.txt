@@ -148,6 +148,7 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 	在JSP页面中执行的JAVA代码。把java代码写在JSP标签之间。语法： <% Java代码 %>
 	比如：<% out.println("Hello World!"); %>, 其中out是一个JSP内置的用于浏览器输出的对象。
 
+	注意：
 	JSP脚本<% expression %>内的代码会生成为目标Servlet类的jspService()方法中的代码片段，因此其作用域只作用于当前JSP页面中该脚本段的后面。
 
 
@@ -365,6 +366,8 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 	原则二：无参的公有构造方法
 	原则三：属性私有
 	原则四：setter和getteer方法
+
+	！！重要 ！！！JavaBeans既可以封装数据，也可以封装业务逻辑功能。
 
 
 28. 什么是JSP动作？
@@ -695,10 +698,52 @@ Cookie来记录用户名和密码。创建完后，我们要将Cookie对象，�
 
 
 
-39. 
+39. 重新理解JSP页面生命周期 以及 JSP脚本
+
+
+	/*************************************** index.jsp 代码段 ********************************************/
+          <!-- 商品循环开始 -->
+           <% 
+               ItemsDAO itemsDao = new ItemsDAO(); 
+               ArrayList<Items> list = itemsDao.getAllItems();
+               if(list!=null&&list.size()>0)
+               {
+	               for(int i=0;i<list.size();i++)
+	               {
+	                  Items item = list.get(i);
+           %>   
+          <div>
+             <dl>
+               <dt>
+                 <a href="details.jsp?id=<%=item.getId()%>"><img src="images/<%=item.getPicture()%>" width="120" height="90" border="1"/></a>
+               </dt>
+               <dd class="dd_name"><%=item.getName() %></dd> 
+               <dd class="dd_city">产地:<%=item.getCity() %>&nbsp;&nbsp;价格:￥ <%=item.getPrice() %></dd> 
+             </dl>
+          </div>
+          <!-- 商品循环结束 -->
+        
+          <%
+                   }
+              } 
+          %>
+
+
+    /*************************************** index.jsp 代码段 ********************************************/
+
+
+    初次见上面的代码，可能会很不习惯，比如最初的JSP脚本里插入的java代码段并不是完整的，连closing括号都没。以及对应的最后的JSP脚本插入的
+括号部分。
+	分析如下：首先上面这种代码的风格是允许的，并不会报错，是因为我们回想一下JSP页面的生命周期，涉及到一个过程那就是JSP页面会由Tomcat的
+JSP引擎将其转化为一个对应的Servlet类，并编译成字节码文件。因此对于JSP脚本中的Java代码，基本上会对应到Servlet中的Java代码，而对于HTML的内容
+会通过一个输出对象out.write("html内容")进行输出。因此，上面这个代码段整理就是被转化成一个循环处理的Servlet类，因此可以循环的输出一个一个
+商品Item.
 
 
 
+
+
+40. 
 
 
 

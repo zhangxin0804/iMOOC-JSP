@@ -1,12 +1,18 @@
 1. 什么是Web应用程序？
 
-	Web应用程序是一种可以通过Web访问的应用程序。Web应用程序的一个最大好处是用户很容易访问应用程序。用户只需要浏览器并接入互联网即可，不需要再安装其他软件。
+	Web应用程序是一种可以通过Web访问的应用程序。Web应用程序的一个最大好处是用户很容易访问应用程序。用户只需要浏览器并接入互联网即可，不需要再安装其他软件。WEB应用程序是基于BS结构即browser-server结构。
 
-	举例：电子商务类网站比如淘宝，天猫；一些门户网站比如搜狐，网易；网上的一些在线营业厅等。
+	举例：电子商务类网站比如淘宝，天猫；一些门户网站比如搜狐，网易；网上的一些在线营业厅等；企业内部系统；搜索引擎等。
 
 	Web应用程序，桌面应用程序和嵌入式应用程序(mobile端)，三者是目前软件开发领域的三大方向。
 
+
+
+
 2. Java Web开发涉及到Java整个架构下的JavaEE方向 (Java的架构分为JavaSE, JavaEE和JavaME). 
+
+
+
 
 
 3. 静态网页 V.S. 动态网页
@@ -23,19 +29,28 @@
 
 
 
+
+
+
 4. Tomcat服务器是常见的WEB应用服务器，是一个Apache组织下的开源项目。它可以用于解析HTML,CSS, 这些标签语言，同时它也是
 JSP/Servlet的容器。因此学习JSP开发，需要这样的一个容器，所以可以考虑用Tomcat服务器。   注意：容器这个概念。
 Tomcat容器等级分为4个等级：Engine, Host, Context和Wrapper, 具体可以看Servlet笔记。
 
+注意：还有一个常见的 企业级WEB应用服务器 JBoss
 
 
-5. 在Mac下，如何启动/关闭 Tomcat服务器？(安装说明见Evernote笔记)
+
+5. 在Mac下，如何启动/关闭 Tomcat服务器？(安装说明见Evernote笔记，注意下面的启动和关闭方式是输入的完整path, 因为并没有配置环境变量)
 	启动：/Library/Tomcat/bin/startup.sh
 	关闭：/Library/Tomcat/bin/shutdown.sh
 
+	环境变量配置： CATALINA_PATH = Tomcat的路径
+				 JAVA_HOME = Java路径 
+	将Tomcat的bin路径加到环境变量PATH中
 
 
-6. Tomcat服务器的目录结构
+
+6. Tomcat服务器的目录结构 (注意：是Tomcat Server的目录结构，不是某一个WEB项目的目录结构)
 
 	/bin		存放各种平台下用于启动和停止Tomcat的命令文件, 存放的都是可执行文件,比如startup.sh和shutdown.sh
 	/conf		存放Tomcat服务器的各种配置文件。比如：server.xml文件配置Tomcat的默认端口号等。
@@ -47,7 +62,7 @@ Tomcat容器等级分为4个等级：Engine, Host, Context和Wrapper, 具体可�
 
 
 
-7. 手动编写第一个Web程序。
+7. 手动编写第一个Web程序。注意一个WEB应用的目录结构。
 	(1) 在/Library/Tomcat/WebApps下创建新工程项目目录。
 	(2) 在新工程目录下，编写index.jsp
 	(3) 在新工程目录下，创建WEB-INF目录, 其中WEB-INF目录下还需要创建：web.xml即工程项目部署文件，classes文件夹，lib文件夹。

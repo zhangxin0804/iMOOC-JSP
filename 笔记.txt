@@ -40,13 +40,15 @@ Tomcat容器等级分为4个等级：Engine, Host, Context和Wrapper, 具体可�
 
 
 
+
+
 5. 在Mac下，如何启动/关闭 Tomcat服务器？(安装说明见Evernote笔记，注意下面的启动和关闭方式是输入的完整path, 因为并没有配置环境变量)
 	启动：/Library/Tomcat/bin/startup.sh
 	关闭：/Library/Tomcat/bin/shutdown.sh
 
-	环境变量配置： CATALINA_PATH = Tomcat的路径
+	环境变量配置：  CATALINA_PATH = Tomcat的路径
 				 JAVA_HOME = Java路径 
-	将Tomcat的bin路径加到环境变量PATH中
+	             将Tomcat的bin路径加到环境变量PATH中
 
 
 
@@ -73,6 +75,29 @@ Tomcat容器等级分为4个等级：Engine, Host, Context和Wrapper, 具体可�
 
 8. WEB-INF目录结构详解。(重要！！！)
 	(1) WEB-INF目录是Java的WEB应用的安全目录，所谓安全目录就是客户端无法访问，只有服务器端可以访问的目录。
+	
+	------------------------------------------------------------------------------------------------------------------
+	注意：如何证明WEB-INF目录是安全目录也就是说用户是不可见的。首先要在Tomcat的conf目录下的web.xml配置文件中有下面的内容
+	
+	<servlet>
+        <servlet-name>default</servlet-name>
+        <servlet-class>org.apache.catalina.servlets.DefaultServlet</servlet-class>
+        <init-param>
+            <param-name>debug</param-name>
+            <param-value>0</param-value>
+        </init-param>
+        <init-param>
+            <param-name>listings</param-name>
+            <param-value>false</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    注意：listings那里的false改成true后，我们就可以看到每个web应用下的所有目录和文件信息了，但会发现看不到WEB-INF目录。同时要注意，在开发的
+         过程中，这里可以设置为true, 方便我们浏览具体信息。正式项目发布时，绝对不能设置为true, 否则信息就暴露给用户了！！！
+	------------------------------------------------------------------------------------------------------------------
+
+
 	(2) 该目录下的web.xml是项目部署文件。比如部署: 注册Servlet, 或者项目的欢迎界面，可以通过在web.xml中添加并更改相应标签来完成。举例如下：
 
 		<welcome-file-list>
@@ -87,19 +112,49 @@ Tomcat容器等级分为4个等级：Engine, Host, Context和Wrapper, 具体可�
 
 
 
+
+
+
+
 9. 注意！！！！！！WEB-INF中的项目部署文件web.xml每次修改后，都要重新启动Tomcat服务器！！！！！很容易忽略！！！！
+
 
 
 
 
 10. 如何修改Tomcat服务器的默认端口号？
 	Tomcat服务器的默认端口号为 8080. 但实际中，我们电脑中会安装很多应用服务器和数据库服务器，因此有可能造成端口冲突。
-在Tomcat服务器的目录下，conf/server.xml文件中，我们可以设置为比如： 8888 来修改默认端口号。
+在Tomcat服务器的目录下，conf/server.xml文件中，我们可以设置为比如： 8888 来修改默认端口号。URIEncoding表示访问的字符编码
 
     <Connector port="8080" protocol="HTTP/1.1"
                connectionTimeout="20000"
-               redirectPort="8443" />
+               redirectPort="8443" 
+               URIEncoding = "UTF-8"
+               />
 
+
+
+http://localhost:8080/MyThirdJSP/login.jsp
+http://192.168.1.100:8080/MyThirdJSP/login.jsp
+
+注意：上面的IP地址，是通过ifconfig查到的，这是个内网IP地址，不是固定的外网IP地址，所以其他人是没法访问的。但是如果都在一个局域网内的话，
+     局域网内的人是可以看到的，比如我用A电脑启动Tomcat然后可以在A电脑上访问到该页面，如果我的B电脑也在这个网络下，B电脑也可以访问到这个页面。
+
+如果不希望在请求页面时的URL中输入:8080端口号，那么可以考虑使用默认的端口号也就是80, 但仍然需要注意80端口是否被占用！！！！
+
+
+
+
+	基于虚拟路径的WEB项目发布 (WEB工程不一定要放在Tomcat的webapps目录中)
+	----------------------
+	比如我们的WEB项目并没有直接创建在Tomcat webapps目录下，而是创建在别的地方。我们可以通过虚拟路径的方式来发布WEB项目。只需要配置一个上下文
+context信息。在Tomcat的conf目录的server.xml中可以找到一个<host>标签，注意这里的name = "localhost", 这就是为什么我们可以用localhost的
+URL来访问。加入以下信息：
+	
+	<context path="/world" docBase=""/>
+	首先path表示的就是这个WEB项目的虚拟路径，这样配置表示以后我们可以通过 localhost:8080/world 来访问这个WEB项目。docBase表示的就是这个
+WEB项目的实际位置也即绝对路径，注意这个绝对路径一定要进入到这个WEB项目中的path
+	
 
 
 
@@ -758,7 +813,30 @@ JSP引擎将其转化为一个对应的Servlet类，并编译成字节码文件�
 
 
 
-40. 
+40. 虚拟主机 Virtual Host的概念
+
+	在Tomcal服务器的conf目录中的server.xml配置文件中，可以看到如下的内容。这相当于就是配置了一个主机host, 所以我们可以通过名称localhost来
+访问我们Tomcat服务器上的资源。我们知道在一个服务器上，是可以有多个主机或者说可以运行多个网站或者WEB服务。因此，我们可以通过在server.xml中，创
+建多个host来得到多个主机。
+
+	这种让多个主机名称host name, 在一个单一服务器上运作，而且可以分开支持每个单一的主机名称的技术叫做虚拟主机virtual host.
+
+
+	//-------------------------------------------------------------------------//
+	<Host name="localhost"  appBase="webapps"
+            unpackWARs="true" autoDeploy="true">
+        <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
+               prefix="localhost_access_log" suffix=".txt"
+               pattern="%h %l %u %t &quot;%r&quot; %s %b" />
+    </Host>
+	//-------------------------------------------------------------------------//
+
+
+
+
+
+
+41. 
 
 
 

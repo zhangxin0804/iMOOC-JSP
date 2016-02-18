@@ -61,8 +61,15 @@ Tomcat容器等级分为4个等级：Engine, Host, Context和Wrapper, 具体可�
 	/temp		Tomcat运行时用于存放临时文件。
 	/webapps 	当发布Web应用时，默认会将Web应用的文件发布到于此目录中，相当于存放一个个web工程。（重要！）
 	/work		Tomcat把由JSP生成的Servlet文件，以及对其编译后生成的字节码文件存储在这里。
+                
+                注意：由于IDE的帮助比如Spring STS, 它IDE内部是可以构建virutal Tomcat来作为Server, 除了这种情况意外，只要在正常的
+                     Tomcat目录中构建了WEB项目，且其中涉及到JSP文件，那么JSP引擎就会将其转化成Servlet，然后对其编译并生成字节码文件，
+                     此时这些文件就保存在/work中！！
 
 
+
+
+         
 
 7. 手动编写第一个Web程序。注意一个WEB应用的目录结构。
 	(1) 在/Library/Tomcat/WebApps下创建新工程项目目录。
@@ -159,7 +166,8 @@ WEB项目的实际位置也即绝对路径，注意这个绝对路径一定要�
 
 	JSP全称 Java Server Pages(Java服务器页面),其根本是一个简化的Servlet设计，它是在传统网页HTML文件中，插入Java程序段，从而形成JSP文件。
 JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端执行的。用JSP开发的Web应用是跨平台的。在JSP的生命周期中，会伴随着JSP转化到Servlet
-的过程(由JSP引擎将JSP转化成Servlet即java类文件.java, 然后编译成字节码文件.class)   注意：是先有Servlet再有的JSP.
+的过程(由JSP引擎将JSP转化成Servlet即java类文件.java, 然后编译成字节码文件.class, 这些文件放在Tomcat的/work目录内)。
+   注意：是先有Servlet再有的JSP.
 
 
 
@@ -192,7 +200,7 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 
 	    	属性 				描述																	默认值
 	    language		指定JSP页面使用的脚本语言														Java
-	    import			通过该属性来引用脚本语言中使用到的类文件											无
+	    import			通过该属性来引用脚本语言中使用到的类文件 (重要！！！！)	 							无
 	    contentType		指定JSP文件类型和页面的字符编码(指服务器发给客户端时的内容编码)					text/html, UTF-8
 		pageEncoding	是JSP文件本身的编码 (contentType更常用)
 
@@ -217,6 +225,9 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 	注意：
 	JSP脚本<% expression %>内的代码会生成为目标Servlet类的jspService()方法中的代码片段，因此其作用域只作用于当前JSP页面中该脚本段的后面。
 
+	注意：<% %>一定要成对儿编程，否则代码可读性很不好容易搞混！！
+	注意：因为写在jsp脚本中的代码都会转化成代码片段在Servlet类的jspService()方法中，因此不能再jsp脚本中定义函数！！！只能在jsp声明中定义
+	     函数！！！
 
 
 
@@ -227,14 +238,15 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 
 	注意：在JSP的声明中，不能访问JSP内置的9大对象！！！！
 
-	JSP声明（<%!  expression  %>）内所定义的变量会生成为目标Servlet类的全局变量，作用域涵盖当前JSP页面及<%@include %>指令所包含进来的JSP文件，且使用不分先后顺序。
+	JSP声明（<%!  expression  %>）内所定义的变量会生成为目标Servlet类的全局变量，作用域涵盖当前JSP页面及<%@include %>指令所包含进来的JSP文件，且使用不分先后顺序。重要！！！！可以测试一下，观察jsp被转化后的那个Servlet的java文件！！
 
 
 
-18. JSP的表达式 (！！！！推荐用JSP的表达式来进行浏览器输出，而不要用内置out对象来输出到浏览器！！！！！)
+18. JSP的表达式 (！！！！推荐用JSP的表达式来进行信息输出，而不要用内置out对象来输出到浏览器！！！！！)
 
 	在JSP页面中执行的表达式,表达式可以是之前定义的一些变量或者定义的方法。语法：   <%= 表达式 %>  
 	注意：表达式不以分号结束！！！不要弄混了！！
+	注意：表达式的执行，会伴随着信息的输出！！
 
 	<%! 
 		String name = "张小哈";
@@ -258,11 +270,14 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 
 
 
+
+
+
 19. JSP页面的生命周期 (重点！！！！！)
 
 	用户向服务器发出请求index.jsp, 服务器判断是否是第一次请求。如果是第一次请求，Tomcat的JSP引擎把该JSP文件转换成为一个Servlet
 (Servlet本质上也是一个java类), 然后经过编译生成字节码文件，并执行jspInit()方法。如果不是第一次请求，则直接找到编译生成的字节码文件，
-解析执行 jspService(). 
+解析执行 jspService(). 所以jsp的页面在第一次运行时会相对比较慢，因为要完成JSP-Servlet的转换。
 	
 	注意：由JSP引擎，将JSP文件转换成Servlet后，并编译生成的对应的字节码文件，存放在 /work目录下，上面笔记中有提到。
 	注意：jspInit()方法，一共只会执行一次。
@@ -272,7 +287,8 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 的编程带来的同步问题，由于该Servlet始终在内存，所以响应是非常快的。
 
 	注意：在转换成Servlet并编译后，产生的字节码文件和.java文件中，可以看到jspInit()方法和jspService()方法！！
-	注意：每当JSP文件发生改变时，当客户发生请求时，JSP引擎就会重新将该JSP转化成Servlet,并编译生成新的字节码文件来解析执行。
+	注意：每当JSP文件发生改变时，当客户发生请求时(比如重新刷新页面)，JSP引擎就会重新将该JSP转化成Servlet,并编译生成新的字节码文件来解析执行。
+
 
 
 
@@ -366,6 +382,8 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 	application(ServletContext)
 	//-----------------------------------------------------------------------------------------//
 
+	【1】String getRealPath(), 返回当前WEB项目的实际绝对路径。
+	【2】
 
 
 
@@ -374,11 +392,23 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 	举例：比如一个用户的登录请求，点击登录即在向服务器发送请求，在请求对象中封装了用户名和密码。当服务器端接收到用户的请求后，判断用户名和密码后
 ，给客户端发送响应页面。
 
+
+
+
+
+
 22. 什么是缓冲区？
 
 	缓冲区又叫buffer, 是内存的一块儿区域用来保存临时数据。当我们调用 out.println()用于向客户端输出内容时，我们在客户端浏览器是可以看见这些
 内容的，同时这些内容实际上也在内存上的缓冲区存着。换句话说，每当我们输出时，输出的内容是先到缓冲区缓存到一定字节数时，作为一个包转发出去的。这样
 按包发送要比一个字节一个字节的发送，效率高！
+
+
+
+
+
+
+
 
 23. 表单常用的提交方式get与post区别
 
@@ -391,6 +421,11 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 	post
 	将用户提交的信息封装在HTML HEADER内。适合提交数据量大，安全性高的用户信息。比如：注册、修改、上传等功能。因此，如何获得post方式提交的表单
 	信息，就要通过其他的内置对象来完成了。
+
+
+
+
+
 
 
 24. 请求转发与请求重定向的区别。(重要！！！)
@@ -847,6 +882,34 @@ JSP引擎将其转化为一个对应的Servlet类，并编译成字节码文件�
 	可以考虑在Tomcat的conf目录中的server.xml配置文件中，找到对应的<Host>然后配置上下文虚拟路径<context>中的path为空，然后可能还需要一些
 其他的设置等。
 
+
+
+
+
+
+42. Spring STS中的Virtual Tomcat虚拟Tomcat Server
+
+	我们在IDE比如Spring STS中创建的WEB项目，它其实是发布在一个虚拟的Tomcat Server中，换句话说当我们在STS中启动了Server.运行了我们在
+IDE中的WEB项目，但实际Tomcat目录下的那些WEB项目并不会启动！！！同时，我们可以通过application内置对象的getRealPath()方法，来得到Spring STS中的WEB项目所在的实际绝对地址路径。
+
+	注意：如果通过Spring STS开发WEB项目，报错时比如报错了某一个行数。此时要去，该WEB项目的real path中去找/work目录下的被转化成Servlet的
+java文件来帮助DEBUG！！！！！
+
+
+
+
+
+
+
+43. JSP页面与java对象的交互！！！！
+
+	首先java类都要定义在IDE的src目录下，然后jsp页面中需要使用到这些Java对象和方法时，首先要通过<%@ page %>即page指令中的import属性将
+对应的java package中的class导入import进来，然后就可以在JSP页面中与这些对象进行交互！！！
+
+
+
+
+44. 
 
 
 

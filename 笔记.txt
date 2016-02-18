@@ -1,6 +1,6 @@
 1. 什么是Web应用程序？
 
-	Web应用程序是一种可以通过Web访问的应用程序。Web应用程序的一个最大好处是用户很容易访问应用程序。用户只需要浏览器并接入互联网即可，不需要再安装其他软件。WEB应用程序是基于BS结构即browser-server结构。
+	Web应用程序是一种可以通过Web访问的应用程序。Web应用程序的一个最大好处是用户很容易访问应用程序。用户只需要浏览器并接入互联网即可，不需要再安装其他软件。
 
 	举例：电子商务类网站比如淘宝，天猫；一些门户网站比如搜狐，网易；网上的一些在线营业厅等；企业内部系统；搜索引擎等。
 
@@ -137,10 +137,7 @@ Tomcat容器等级分为4个等级：Engine, Host, Context和Wrapper, 具体可�
 http://localhost:8080/MyThirdJSP/login.jsp
 http://192.168.1.100:8080/MyThirdJSP/login.jsp
 
-注意：上面的IP地址，是通过ifconfig查到的，这是个内网IP地址，不是固定的外网IP地址，所以其他人是没法访问的。但是如果都在一个局域网内的话，
-     局域网内的人是可以看到的，比如我用A电脑启动Tomcat然后可以在A电脑上访问到该页面，如果我的B电脑也在这个网络下，B电脑也可以访问到这个页面。
-
-如果不希望在请求页面时的URL中输入:8080端口号，那么可以考虑使用默认的端口号也就是80, 但仍然需要注意80端口是否被占用！！！！
+	 如果不希望在请求页面时的URL中输入:8080端口号，那么可以考虑使用默认的端口号也就是80, 但仍然需要注意80端口是否被占用！！！！
 
 
 
@@ -154,7 +151,7 @@ context信息。在Tomcat的conf目录的server.xml中可以找到一个<host>�
 	首先path表示的就是这个WEB项目的虚拟路径，这样配置表示以后我们可以通过 localhost:8080/world 来访问这个WEB项目。docBase表示的就是这个
 WEB项目的实际位置也即绝对路径，注意这个绝对路径一定要进入到这个WEB项目中的path
 	
-
+	注意：这里可以回想Tomcat容器等级中的Context等级的概念。找一些相关性。
 
 
 
@@ -172,7 +169,7 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 	
 	JSP： 		Java平台，安全性高，适合开发大型企业级WEB应用程序。还有如今流行的分布式计算框架，Hadoop也是基于Java的。
 	ASP.NET： 	.NET平台，简单易学，安全性以及跨平台性差。
-	PHP：		简单高效，成本低开发周期短，特别适合中小型企业的WEB应用开发。(LAMP: Linus + Apache + MySQL + PHP)
+	PHP：		简单高效，成本低开发周期短，特别适合中小型企业的WEB应用开发。(LAMP: Linux + Apache + MySQL + PHP)
 
 
 
@@ -196,7 +193,7 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 	    	属性 				描述																	默认值
 	    language		指定JSP页面使用的脚本语言														Java
 	    import			通过该属性来引用脚本语言中使用到的类文件											无
-	    contentType		指定JSP文件类型和页面的字符编码(指服务器发给客户端时的内容编码)					text/html, ISO-8859-1
+	    contentType		指定JSP文件类型和页面的字符编码(指服务器发给客户端时的内容编码)					text/html, UTF-8
 		pageEncoding	是JSP文件本身的编码 (contentType更常用)
 
 
@@ -205,8 +202,8 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 
 15. JSP的注释
 
-		HTML的注释：		<!-- html注释 -->  这种注释，客户端可见，也即客户端view page source是可以看到的。
-		JSP的注释： 		<%-- html注释 --%>  客户端不可见。可以用来注释JSP脚本。
+		HTML的注释：		<!-- 注释html标签 -->  这种注释，客户端可见，也即客户端view page source是可以看到的。
+		JSP的注释： 		<%-- 注释html标签或jsp标签 --%>  客户端不可见。可以用来注释JSP脚本。
 		JSP脚本内的注释：	//  /* */          也即脚本中Java的注释，客户端不可见。 比如 <%       //           %>
 
 
@@ -234,7 +231,7 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 
 
 
-18. JSP的表达式
+18. JSP的表达式 (！！！！推荐用JSP的表达式来进行浏览器输出，而不要用内置out对象来输出到浏览器！！！！！)
 
 	在JSP页面中执行的表达式,表达式可以是之前定义的一些变量或者定义的方法。语法：   <%= 表达式 %>  
 	注意：表达式不以分号结束！！！不要弄混了！！
@@ -286,7 +283,7 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 为：page, pageContext, exception, config
 
 	//-----------------------------------------------------------------------------------------//
-	out
+	out(PrintWriter)
 	out对象是jspWriter类的实例，是向客户输出内容常用的对象。常用方法如下：
 	【1】void println(), 向客户端打印字符串，可以输出HTML标签，这样客户端浏览器收到响应时可以相应解析。
 	【2】void clear(), 清除缓冲区的内容，如果在flush之后调用会抛出异常。
@@ -298,7 +295,7 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 	【8】void close(), 关闭输出流。
 
 	//-----------------------------------------------------------------------------------------//
-	request
+	request(HttpServletRequest)
 	客户端的请求信息被封装在request对象中，通过它才能了解到客户的需求，然后做出响应。它是HttpServletRequest类的实例。request对象具有请求
 	域，即完成客户端的请求之前，该对象一直有效。常用方法如下：
 	【1】String getParameter(String name), 表单中的<input>控件中,有一个属性是name,传递的就是这个name属性的值,得到对应value属性的值。
@@ -341,7 +338,7 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 
 	//-----------------------------------------------------------------------------------------//
 
-	response
+	response(HttpServletResponse)
 	response对象包含了响应客户请求的有关信息，但在JSP中很少直接用到它。它是HttpServletResponse类的实例。response对象具有页面的作用域，即
 	访问一个页面时，该页面内的response对象只能对这次访问有效，其他页面的response对象对当前页面无效。
 
@@ -356,7 +353,7 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 
 	//-----------------------------------------------------------------------------------------//
 
-	session
+	session(HttpSession)
 	【1】long getCreationTime(), 返回session创建时间, 单位为ms毫秒。
 	【2】String getId(); 返回session创建时JSP引擎为它设的唯一ID号。
 	【3】Object setAttribute(String name, Object value), 按照键值对，给session对象中设置一个属性。
@@ -365,6 +362,9 @@ JSP是一种动态网页技术标准。JSP与Servlet一样，是在服务器端�
 	【6】int getMaxInactiveInterval(), 返回两次请求间隔多长时间此session被取消(单位秒)
 	【7】setMaxInactiveInterval(), 设置当前session最大生存期限，单位为秒。
 
+
+	application(ServletContext)
+	//-----------------------------------------------------------------------------------------//
 
 
 
@@ -850,7 +850,6 @@ JSP引擎将其转化为一个对应的Servlet类，并编译成字节码文件�
 
 
 
-42. 
 
 
 

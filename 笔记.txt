@@ -23,7 +23,7 @@
 		所需技术：HTML，CSS
 
 	动态网页
-		表现形式：网页中的内容通过程序动态显示的，自动更新。比如：动态指的是能与用户进行交互，比如登录时输入正确的用户名和密码，系统会提示登录成功
+		表现形式：网页中的内容通过程序动态显示的，自动更新。比如：动态指的是能与用户进行交互，比如登录时输入正确的用户名和密码，系统会提示登录成功。
 
 		所需技术：HTML，CSS, 数据库database技术，至少一门高级语言(Java, C#, PHP), JavaScript, XML等。主流的动态网页脚本技术(JSP, ASP.NET, PHP). 注意：ASP.NET是微软的技术，PHP是Apache的技术。
 
@@ -38,6 +38,25 @@ Tomcat容器等级分为4个等级：Engine, Host, Context和Wrapper, 具体可�
 
 注意：还有一个常见的 企业级WEB应用服务器 JBoss
 
+注意：localhost:8080/XXXX/YYYY, 其中 localhost:8080 可以看做是一个host容器，管理着下一级的WEB项目资源。之所以默认要把WEB项目放在
+     Tomcat目录的webapps目录下，是因为这个host容器的路径是到这个webapps目录下！！！之所以这样是因为在server.xml默认配置中，有如下内容,
+     可以看到这个host标签可以想象成这个host容器，它配置了appBase为webapps, 所以其下一级从webapps目录下开始。
+
+
+     //-----------------------------------------------------------------------------//
+      <Host name="localhost"  appBase="webapps"
+            unpackWARs="true" autoDeploy="true">
+
+        <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
+               prefix="localhost_access_log" suffix=".txt"
+               pattern="%h %l %u %t &quot;%r&quot; %s %b" />
+
+      </Host>
+     //-----------------------------------------------------------------------------//
+
+
+
+
 
 
 
@@ -46,8 +65,8 @@ Tomcat容器等级分为4个等级：Engine, Host, Context和Wrapper, 具体可�
 	启动：/Library/Tomcat/bin/startup.sh
 	关闭：/Library/Tomcat/bin/shutdown.sh
 
-	环境变量配置：  CATALINA_PATH = Tomcat的路径
-				 JAVA_HOME = Java路径 
+	环境变量配置：  CATALINA_HOME = Tomcat的路径
+				 JAVA_HOME = JDK路径 
 	             将Tomcat的bin路径加到环境变量PATH中
 
 
@@ -80,6 +99,8 @@ Tomcat容器等级分为4个等级：Engine, Host, Context和Wrapper, 具体可�
 
 
 
+
+
 8. WEB-INF目录结构详解。(重要！！！)
 	(1) WEB-INF目录是Java的WEB应用的安全目录，所谓安全目录就是客户端无法访问，只有服务器端可以访问的目录。
 	
@@ -100,8 +121,7 @@ Tomcat容器等级分为4个等级：Engine, Host, Context和Wrapper, 具体可�
         <load-on-startup>1</load-on-startup>
     </servlet>
 
-    注意：listings那里的false改成true后，我们就可以看到每个web应用下的所有目录和文件信息了，但会发现看不到WEB-INF目录。同时要注意，在开发的
-         过程中，这里可以设置为true, 方便我们浏览具体信息，显示目录。正式项目发布时，绝对不能设置为true, 否则信息就暴露给用户了！！！
+    注意：listings那里的false改成true后，我们就可以在没有默认的访问文件时，看到每个web应用下的所有目录和文件信息了，但会发现看不到WEB-INF目录。同时要注意，在开发的过程中，这里可以设置为true, 方便我们浏览具体信息，显示目录。正式项目发布时，绝对不能设置为true, 否则信息就暴露给用户了！！！
 	------------------------------------------------------------------------------------------------------------------
 
 
@@ -144,7 +164,8 @@ Tomcat容器等级分为4个等级：Engine, Host, Context和Wrapper, 具体可�
 http://localhost:8080/MyThirdJSP/login.jsp
 http://192.168.1.100:8080/MyThirdJSP/login.jsp
 
-	 如果不希望在请求页面时的URL中输入:8080端口号，那么可以考虑使用默认的端口号也就是80, 但仍然需要注意80端口是否被占用！！！！
+	 如果不希望在请求页面时的URL中输入:8080端口号，那么可以考虑使用默认的端口号也就是80, 但仍然需要注意80端口是否被占用！！！！事实上大部分
+网站都是使用的默认端口，比如 www.baidu.com 或者 www.douban.com
 
 
 
@@ -158,7 +179,12 @@ context信息。在Tomcat的conf目录的server.xml中可以找到一个<host>�
 	首先path表示的就是这个WEB项目的虚拟路径，这样配置表示以后我们可以通过 localhost:8080/world 来访问这个WEB项目。docBase表示的就是这个
 WEB项目的实际位置也即绝对路径，注意这个绝对路径一定要进入到这个WEB项目中的path
 	
-	注意：这里可以回想Tomcat容器等级中的Context等级的概念。找一些相关性。
+	注意：这里可以回想Tomcat容器等级中的Context容器等级的概念。找一些相关性。
+
+
+
+
+
 
 
 
@@ -867,7 +893,7 @@ JSP引擎将其转化为一个对应的Servlet类，并编译成字节码文件�
 
 
 
-40. 虚拟主机 Virtual Host的概念 (一台服务发布多个WEB应用)
+40. 虚拟主机 Virtual Host的概念 (！！！ 一台服务支持多个host容器 ！！！)
 
 	在Tomcal服务器的conf目录中的server.xml配置文件中，可以看到如下的内容。这相当于就是配置了一个主机host, 所以我们可以通过名称localhost来
 访问我们Tomcat服务器上的资源。我们知道在一个服务器上，是可以有多个主机或者说可以运行多个网站或者WEB服务。因此，我们可以通过在server.xml中，创
@@ -891,6 +917,9 @@ JSP引擎将其转化为一个对应的Servlet类，并编译成字节码文件�
 新的host名称也映射到这个IP地址上，只有这样才能通过新的host name来找到我们的主机。
 
 	在/etc目录下有一个hosts文件，里面记录了这些信息。
+
+
+
 
 
 

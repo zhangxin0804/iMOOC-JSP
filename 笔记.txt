@@ -58,9 +58,6 @@ Tomcat容器等级分为4个等级：Engine, Host, Context和Wrapper, 具体可�
 
 
 
-
-
-
 5. 在Mac下，如何启动/关闭 Tomcat服务器？(安装说明见Evernote笔记，注意下面的启动和关闭方式是输入的完整path, 因为并没有配置环境变量)
 	启动：/Library/Tomcat/bin/startup.sh
 	关闭：/Library/Tomcat/bin/shutdown.sh
@@ -71,7 +68,8 @@ Tomcat容器等级分为4个等级：Engine, Host, Context和Wrapper, 具体可�
 
 
 
-6. Tomcat服务器的目录结构 (注意：是Tomcat Server的目录结构，不是某一个WEB项目的目录结构)
+
+6.  Tomcat服务器的目录结构 (注意：是Tomcat Server的目录结构，不是某一个WEB项目的目录结构)
 
 	/bin		存放各种平台下用于启动和停止Tomcat的命令文件, 存放的都是可执行文件,比如startup.sh和shutdown.sh
 	/conf		存放Tomcat服务器的各种配置文件。比如：server.xml文件配置Tomcat的默认端口号等。
@@ -93,7 +91,9 @@ Tomcat容器等级分为4个等级：Engine, Host, Context和Wrapper, 具体可�
 7. 手动编写第一个Web程序。注意一个WEB应用的目录结构。
 	(1) 在/Library/Tomcat/WebApps下创建新工程项目目录。
 	(2) 在新工程目录下，编写index.jsp
-	(3) 在新工程目录下，创建WEB-INF目录, 其中WEB-INF目录下还需要创建：web.xml即工程项目部署文件，classes文件夹，lib文件夹。
+	(3) 在新工程目录下，创建WEB-INF目录, 其中WEB-INF目录下还需要创建：web.xml即该工程项目部署文件，classes文件夹，lib文件夹。
+	    · classess文件夹，用来存放一些JavaBeans即Java类编译后的字节码.class文件
+	    · lib文件夹，用来存放一些类库文件
 	(4) 测试运行。
 
 
@@ -102,8 +102,8 @@ Tomcat容器等级分为4个等级：Engine, Host, Context和Wrapper, 具体可�
 
 
 8. WEB-INF目录结构详解。(重要！！！)
+
 	(1) WEB-INF目录是Java的WEB应用的安全目录，所谓安全目录就是客户端无法访问，只有服务器端可以访问的目录。
-	
 	------------------------------------------------------------------------------------------------------------------
 	注意：如何证明WEB-INF目录是安全目录也就是说用户是不可见的。首先要在Tomcat的conf目录下的web.xml配置文件中有下面的内容：
 	
@@ -121,7 +121,7 @@ Tomcat容器等级分为4个等级：Engine, Host, Context和Wrapper, 具体可�
         <load-on-startup>1</load-on-startup>
     </servlet>
 
-    注意：listings那里的false改成true后，我们就可以在没有默认的访问文件时，看到每个web应用下的所有目录和文件信息了，但会发现看不到WEB-INF目录。同时要注意，在开发的过程中，这里可以设置为true, 方便我们浏览具体信息，显示目录。正式项目发布时，绝对不能设置为true, 否则信息就暴露给用户了！！！
+    注意：listings那里的false改成true后，我们就可以在没有默认的访问页面时，看到每个web应用下的所有目录和文件信息了，但会发现看不到WEB-INF目录。同时要注意，在开发的过程中，这里可以设置为true, 方便我们浏览具体信息，显示目录。正式项目发布时，绝对不能设置为true, 否则信息就暴露给用户了！！！
 	------------------------------------------------------------------------------------------------------------------
 
 
@@ -134,7 +134,7 @@ Tomcat容器等级分为4个等级：Engine, Host, Context和Wrapper, 具体可�
         	<welcome-file>index.jsp</welcome-file>
     	</welcome-file-list>
 
-	(3) 该目录下的classes文件夹，存放编译后的byte code文件即 *.class文件。注意：与/work目录下的文件的区别？？！！
+	(3) 该目录下的classes文件夹，存放编译后的byte code文件即 *.class文件。用来存放一些JavaBeans即Java类编译后的字节码.class文件。
 	(4) 该目录下的lib文件夹，存放工程需要的jar包。比如一些连接数据库的驱动jar包。
 
 
@@ -171,7 +171,7 @@ http://192.168.1.100:8080/MyThirdJSP/login.jsp
 
 
 	基于虚拟路径的WEB项目发布 (WEB工程可以不放在Tomcat的webapps目录中)
-	----------------------
+	------------------------------------------------------------
 	比如我们的WEB项目并没有直接创建在Tomcat webapps目录下，而是创建在别的地方。我们可以通过虚拟路径的方式来发布WEB项目。只需要配置一个上下文
 context信息。在Tomcat的conf目录的server.xml中可以找到一个<host>标签，加入以下信息：
 	
